@@ -22,14 +22,22 @@ public class ResultHandler {
         results.addLast(resultData);
     }
     public void showResults(){
+        boolean haveSomething = false;
         while(results.iterator().hasNext()){
-            showResult(results.removeFirst());
+            boolean res = showResult(results.removeFirst());
+            if(res){
+                haveSomething = true;
+            };
         }
+        if (haveSomething){
+            messageComponent.printEmptyLine();
+        }
+
     }
-    private void showResult(ResultData resultData){
+    private boolean showResult(ResultData resultData){
         if (ResultData.isEmpty(resultData)){
             messageComponent.printNothing();
-            return;
+            return false;
         }
         if (resultData.hasElements()){
             for (LabWork labWork : resultData.labsList){
@@ -42,5 +50,6 @@ public class ResultHandler {
         if(resultData.hasErrorMessage()){
             warningComponent.warningMessage(resultData.errorMessage);
         }
+        return true;
     }
 }

@@ -2,7 +2,8 @@ package client;
 
 import data.CommandData;
 import abstractions.ICommand;
-import exceptions.ExceptionType;
+import exceptions.DigitRequiredException;
+import exceptions.StringRequiredException;
 import exceptions.WrongInputException;
 import util.CommandManager;
 
@@ -14,10 +15,10 @@ public class CommandDataFormer {
     public void validateCommand(CommandData commandData) throws WrongInputException, NumberFormatException{
         ICommand command = commandData.command;
         if (command.hasIntDigit() && commandData.intDigit == null) {
-            throw new WrongInputException(ExceptionType.NO_INTEGER, command.getName());
+            throw new DigitRequiredException(command.getName());
         }
         if (command.hasString() && commandData.string == null) {
-            throw new WrongInputException(ExceptionType.NO_STRING, command.getName());
+            throw new StringRequiredException(command.getName());
         }
         if (command.hasElement()) {
             if (commandData.client.isReadingScript()) {

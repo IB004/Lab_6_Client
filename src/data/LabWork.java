@@ -1,7 +1,8 @@
 package data;
 
-import exceptions.ExceptionType;
+import exceptions.EmptyFieldException;
 import exceptions.MustBeHigherException;
+import exceptions.ShouldNotContainException;
 import exceptions.WrongInputException;
 
 import java.io.Serializable;
@@ -13,13 +14,13 @@ import java.util.Locale;
  */
 public class LabWork implements Comparable<LabWork>, Serializable{
 
-    private static final long SERIAL_VERSION_UID = 1L;
-    static Integer collectionIDPointer = Integer.MIN_VALUE;
+    private static final long serialVersionUID = 1L;
+    static Integer collectionIDPointer = 0;
     public LabWork(){
         this.creationDate = LocalDateTime.now();
     }
 
-    transient private Integer id; //Поле не может быть null, Значение поля должно быть больше 0, Значение
+    private Integer id; //Поле не может быть null, Значение поля должно быть больше 0, Значение
                         // этого поля должно быть уникальным,
                         // Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
@@ -37,12 +38,10 @@ public class LabWork implements Comparable<LabWork>, Serializable{
     }
     public void setName(String str) throws WrongInputException{
         if (str == null || str.isBlank()){
-            throw new WrongInputException(ExceptionType.EMPTY_FIELD);
+            throw new EmptyFieldException();
         }
         if(str.contains(",")){
-            WrongInputException e = new WrongInputException(ExceptionType.SHOULD_NOT_CONTAIN);
-            e.setInfo(",");
-            throw e;
+            throw new ShouldNotContainException(",");
         }
         if (str.length()>128) {
             str = str.substring(0, 128);
@@ -87,7 +86,7 @@ public class LabWork implements Comparable<LabWork>, Serializable{
     }
     public void setCoordinatesX(String str) throws WrongInputException, NumberFormatException{
         if (str == null || str.isBlank()){
-            throw new WrongInputException(ExceptionType.EMPTY_FIELD);
+            throw new EmptyFieldException();
         }
         Long digit = Long.valueOf(str);
         if (digit <= -81){
@@ -97,7 +96,7 @@ public class LabWork implements Comparable<LabWork>, Serializable{
     }
     public void setCoordinatesY(String str) throws WrongInputException, NumberFormatException{
         if (str == null || str.isBlank()){
-            throw new WrongInputException(ExceptionType.EMPTY_FIELD);
+            throw new EmptyFieldException();
         }
         Long digit = Long.valueOf(str);
         if (digit <= -571){
@@ -107,7 +106,7 @@ public class LabWork implements Comparable<LabWork>, Serializable{
     }
     public void setDifficulty(String str) throws WrongInputException, IllegalArgumentException{
         if (str == null || str.isBlank()){
-            throw new WrongInputException(ExceptionType.EMPTY_FIELD);
+            throw new EmptyFieldException();
         }
         str = str.toUpperCase(Locale.ROOT);
         switch (str){
@@ -119,7 +118,7 @@ public class LabWork implements Comparable<LabWork>, Serializable{
     }
     public void setDisciplineName(String str) throws WrongInputException{
         if (str == null || str.isBlank()){
-            throw new WrongInputException(ExceptionType.EMPTY_FIELD);
+            throw new EmptyFieldException();
         }
         this.discipline.setName(str);
     }
@@ -147,7 +146,7 @@ public class LabWork implements Comparable<LabWork>, Serializable{
     }
     public void setCreationDate(String str) throws WrongInputException {
         if (str == null || str.isBlank()){
-            throw new WrongInputException(ExceptionType.EMPTY_FIELD);
+            throw new EmptyFieldException();
         }
         LocalDateTime localDateTime = LocalDateTime.parse(str);
         this.creationDate = localDateTime;
@@ -181,7 +180,7 @@ public class LabWork implements Comparable<LabWork>, Serializable{
 
     public String[] toStringArray(){
         String[] str = {
-                String.valueOf(id + Integer.MIN_VALUE),
+                String.valueOf(id),
                 String.valueOf(creationDate),
                 String.valueOf(name),
                 String.valueOf(minimalPoint),

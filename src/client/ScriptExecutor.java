@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class ScriptExecutor {
     public ScriptExecutor(){}
-    public void executeScript(CommandData commandData) throws NestingLevelException, IOException, WrongInputException, ClassNotFoundException {
+    public void executeScript(CommandData commandData) throws NestingLevelException, IOException, WrongInputException, ClassNotFoundException, InterruptedException {
         IClientCommandExecutor client = commandData.client;
         client.setNestingLevel(client.getNestingLevel() + 1);
         LinkedList<CommandData> commandsList = new LinkedList<>();
@@ -38,11 +38,10 @@ public class ScriptExecutor {
             while (commandsList.iterator().hasNext()){
                 CommandData currentCommand = commandsList.removeFirst();
                 client.getWebDispatcher().sendCommandDataToExecutor(currentCommand);
-                commandData.client.getWebDispatcher().getResultDataFromServer();
-                commandData.client.getResultHandler().showResults();
+                Thread.sleep(300);
+                commandData.client.showServerRespond();
             }
             client.getMessageComponent().printEmptyLine();
             client.setNestingLevel(client.getNestingLevel() - 1);;
     }
-
 }

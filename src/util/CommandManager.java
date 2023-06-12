@@ -1,7 +1,7 @@
 package util;
 
 import commands.*;
-import exceptions.ExceptionType;
+import exceptions.WrongCommandNameException;
 import exceptions.WrongInputException;
 import abstractions.ICommand;
 
@@ -29,7 +29,6 @@ public class CommandManager {
         CommandManager.register(new UpdateByIdCommand());
         CommandManager.register(new RemoveByIdCommand());
         CommandManager.register(new ClearCommand());
-        CommandManager.register(new SaveCommand());
         CommandManager.register(new ExecuteScriptCommand());
         CommandManager.register(new ExitCommand());
         CommandManager.register(new ShuffleCommand());
@@ -42,7 +41,7 @@ public class CommandManager {
     public static ICommand getCommand(String commandName) throws WrongInputException{
         ICommand command = commandMap.get(commandName);
         if (command == null) {
-            throw new WrongInputException(ExceptionType.WRONG_COMMAND, commandName);
+            throw new WrongCommandNameException(commandName);
         }
         return command;
     }

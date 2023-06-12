@@ -4,7 +4,6 @@ import abstractions.IClientCommandExecutor;
 import abstractions.ICommand;
 import abstractions.IServerCommandExecutor;
 
-
 import java.io.Serializable;
 import java.util.Scanner;
 
@@ -13,7 +12,7 @@ import java.util.Scanner;
  */
 
 public class CommandData implements Serializable {
-    private static final long SERIAL_VERSION_UID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public ICommand command;
     public String commandName;
@@ -25,7 +24,7 @@ public class CommandData implements Serializable {
     transient public Scanner scriptScanner;
 
     public boolean isEmpty(){
-        return this.commandName == null || this.command == null;
+        return this.command == null;
     }
 
     @Override

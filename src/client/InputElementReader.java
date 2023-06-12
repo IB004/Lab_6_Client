@@ -34,7 +34,7 @@ public class InputElementReader {
         try {
             labWork.setName(readWord("Type the name"));
         }catch (WrongInputException e){
-            warningComponent.wrongInput(e);
+            warningComponent.showExceptionWarning(e);
             readName(labWork);
         }
     }
@@ -43,7 +43,7 @@ public class InputElementReader {
             labWork.setMinimalPoint(readWord("Type the minimal point"));
         }
         catch (WrongInputException e){
-            warningComponent.wrongInput(e);
+            warningComponent.showExceptionWarning(e);
             readMinimalPoint(labWork);
         }
         catch (NumberFormatException e){
@@ -56,7 +56,7 @@ public class InputElementReader {
             labWork.setMaximumPoint(readWord("Type the maximum point"));
         }
         catch (WrongInputException e){
-            warningComponent.wrongInput(e);
+            warningComponent.showExceptionWarning(e);
             readMaximumPoint(labWork);
         }
         catch (NumberFormatException e){
@@ -69,7 +69,7 @@ public class InputElementReader {
             labWork.setPersonalQualitiesMaximum(readWord("Type the personal qualities maximum"));
         }
         catch (WrongInputException e){
-            warningComponent.wrongInput(e);
+            warningComponent.showExceptionWarning(e);
             readPersonalQualitiesMaximum(labWork);
         }
         catch (NumberFormatException e){
@@ -82,7 +82,7 @@ public class InputElementReader {
             labWork.setCoordinatesX(readWord("Type the x coordinate"));
         }
         catch (WrongInputException e){
-            warningComponent.wrongInput(e);
+            warningComponent.showExceptionWarning(e);
             readCoordinatesX(labWork);
         }
         catch (NumberFormatException e){
@@ -95,7 +95,7 @@ public class InputElementReader {
             labWork.setCoordinatesY(readWord("Type the y coordinate"));
         }
         catch (WrongInputException e){
-            warningComponent.wrongInput(e);
+            warningComponent.showExceptionWarning(e);
             readCoordinatesY(labWork);
         }
         catch (NumberFormatException e){
@@ -109,7 +109,7 @@ public class InputElementReader {
                                              "VERY_HARD, INSANE or TERRIBLE");
             labWork.setDifficulty(str);
         }catch (WrongInputException e){
-            warningComponent.wrongInput(e);
+            warningComponent.showExceptionWarning(e);
             readDifficulty(labWork);
         }
         catch (IllegalArgumentException e){
@@ -121,7 +121,7 @@ public class InputElementReader {
         try {
             labWork.setDisciplineName(readWord("Type the discipline name"));
         }catch (WrongInputException e){
-            warningComponent.wrongInput(e);
+            warningComponent.showExceptionWarning(e);
             readDisciplineName(labWork);
         }
     }
@@ -130,7 +130,7 @@ public class InputElementReader {
             labWork.setDisciplineLectureHours(readWord("Type the discipline lecture hours"));
         }
         catch (WrongInputException e){
-            warningComponent.wrongInput(e);
+            warningComponent.showExceptionWarning(e);
             readDisciplineLectureHours(labWork);
         }
         catch (NumberFormatException e){
@@ -143,7 +143,7 @@ public class InputElementReader {
             labWork.setDisciplineLabsCount(readWord("Type the discipline labs count"));
         }
         catch (WrongInputException e){
-            warningComponent.wrongInput(e);
+            warningComponent.showExceptionWarning(e);
             readDisciplineLabsCount(labWork);
         }
         catch (NumberFormatException e){

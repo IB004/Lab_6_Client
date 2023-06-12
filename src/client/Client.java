@@ -3,6 +3,7 @@ import data.CommandData;
 import data.ResultData;
 import abstractions.IClientCommandExecutor;
 import abstractions.ICommand;
+import exceptions.WrongInputException;
 import util.CommandManager;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class Client implements IClientCommandExecutor {
         inputHandler = new InputHandler(warningComponent);
         resultHandler = new ResultHandler(messageComponent, warningComponent);
         scriptExecutor = new ScriptExecutor();
-        webDispatcher = new WebDispatcher(messageComponent);
+        webDispatcher = new WebDispatcher(messageComponent, warningComponent);
     }
     private boolean scriptReading = false;
     private int nestingLevel = 0;
@@ -42,7 +43,6 @@ public class Client implements IClientCommandExecutor {
     public void setNestingLevel(int num){
         nestingLevel = num;
     }
-
     public CommandDataFormer getCommandDataFormer() {
         return commandDataFormer;
     }
@@ -53,7 +53,6 @@ public class Client implements IClientCommandExecutor {
     public Message getMessageComponent() {
         return messageComponent;
     }
-
     public Warning getWarningComponent() {
         return warningComponent;
     }
@@ -64,34 +63,47 @@ public class Client implements IClientCommandExecutor {
         return webDispatcher;
     }
 
-
-
     public void doWhileTrue(){
         try {
             webDispatcher.connect("127.0.0.1", 8888);
-            while (true){
-                    CommandData commandData = commandDataFormer.getNewCommandData();
-                    commandData.client = this;
-                    String[] words = inputHandler.readLine();
-                    commandDataFormer.fillCommandData(words, commandData);
-                    if(!commandData.isEmpty()){
-                        commandDataFormer.validateCommand(commandData);
-                        webDispatcher.sendCommandDataToExecutor(commandData);
-                    }
-                    webDispatcher.getResultDataFromServer();
-                    resultHandler.showResults();
-
+            while (true) {
+                showServerRespond();
+                CommandData commandData = commandDataFormer.getNewCommandData();
+                commandData.client = this;
+                String[] words = inputHandler.readLine();
+                commandDataFormer.fillCommandData(words, commandData);
+                if (!commandData.isEmpty()) {
+                    commandDataFormer.validateCommand(commandData);
+                    webDispatcher.sendCommandDataToExecutor(commandData);
+                }
             }
         }
-        catch (Exception e){
+        catch (WrongInputException e){
+            warningComponent.showExceptionWarning(e);
+            this.doWhileTrue();
+        }
+        catch (IOException e){
             warningComponent.showWarning(e);
+            warningComponent.warningMessage("Server is unavailable. Repeat your command after reconnection");
+            webDispatcher.isConnected = false;
+            this.doWhileTrue();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            this.doWhileTrue();
         }
     }
 
-
-    public void execute(CommandData commandData){
+    public void showServerRespond() throws IOException, ClassNotFoundException, InterruptedException {
+        Thread.sleep(500);
+        ResultData resultData = webDispatcher.getResultDataFromServer();
+        resultHandler.addResult(resultData);
+        resultHandler.showResults();
+    }
+    public ResultData execute(CommandData commandData){
         ResultData resultData = commandData.command.execute(commandData);
         resultHandler.addResult(resultData);
+        return resultData;
     }
     public ResultData help(CommandData commandData){
         HashMap<String, ICommand> commandMap = CommandManager.getCommandMap();
@@ -99,6 +111,7 @@ public class Client implements IClientCommandExecutor {
         for (ICommand command : values){
             messageComponent.showCommandDescription(command);
         }
+        messageComponent.printEmptyLine();
         return null;
     }
     public ResultData exit(CommandData commandData){
@@ -119,7 +132,7 @@ public class Client implements IClientCommandExecutor {
             nestingLevel = 0;
         }
         catch (Exception e){
-            warningComponent.warningMessage(e.getMessage());
+            warningComponent.showExceptionWarning(e);
         }
         ResultData resultData = new ResultData();
         resultData.resultText = "Script was successfully finished";

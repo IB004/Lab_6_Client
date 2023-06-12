@@ -1,4 +1,4 @@
 package exceptions;
 
-public class NestingLevelException extends MyException {
+public class NestingLevelException extends Exception {
 }

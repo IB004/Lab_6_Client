@@ -1,10 +1,12 @@
 package data;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 /**
  * ResultData is a special open storage class, that contains full info about result of the command.
  */
-public class ResultData {
+public class ResultData implements Serializable {
+    private static final long serialVersionUID = 1L;
     public String resultText;
     public LinkedList<LabWork> labsList = new LinkedList<>();
     public String errorMessage;

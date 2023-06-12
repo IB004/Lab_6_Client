@@ -1,7 +1,9 @@
 package abstractions;
 
 import data.CommandData;
+import data.ResultData;
 
 public interface ICommandExecutor {
-    public void execute(CommandData commandData);
+    public ResultData execute(CommandData commandData);
+
 }

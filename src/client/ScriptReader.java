@@ -33,7 +33,6 @@ public class ScriptReader {
             return null;
         }
     }
-
     private String readWord(Scanner fileScanner){
         String line = nextScriptLine(fileScanner);
         if (line == null){

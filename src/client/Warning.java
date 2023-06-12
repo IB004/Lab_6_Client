@@ -7,27 +7,42 @@ public class Warning {
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\u001B[31m";
 
-    public <Exc extends Exception> void showWarning(Exc e) {
-        try {
-            WrongInputException e1 = (WrongInputException) e;
-        }
-        catch (ClassCastException classCastException){
-            warningMessage("Unknown exception");
-        }
+    public void showWarning(Exception e) {
+            warningMessage(e.getMessage());
     }
-    public void wrongInput(WrongInputException e) {
-        /*
-        switch (e.getExceptionType()) {
-            case EMPTY_COMMAND -> Message.printNothing();
-            case WRONG_COMMAND -> wrongCommand(e.getCommandName());
-            case NO_INTEGER -> digitIsRequired(e.getCommandName());
-            case NO_STRING -> stringIsRequired(e.getCommandName());
-            case EMPTY_FIELD -> canNotBeEmpty();
-            case MUST_BE_HIGHER -> mustBeHigher(e.getInfo());
-            case SHOULD_NOT_CONTAIN -> shouldNotContain(e.getInfo());
-            default -> wrongMessage("Something went wrong. Please, try again.");
+    public void showExceptionWarning (Exception e) {
+        if (e instanceof WrongCommandNameException){
+            WrongInputException wrongInputException = (WrongInputException) e;
+            wrongCommand(wrongInputException.getCommandName());
+            return;
         }
-         */
+        if (e instanceof DigitRequiredException){
+            WrongInputException wrongInputException = (WrongInputException) e;
+            digitIsRequired(wrongInputException.getCommandName());
+            return;
+        }
+        if (e instanceof StringRequiredException){
+            WrongInputException wrongInputException = (WrongInputException) e;
+            stringIsRequired(wrongInputException.getCommandName());
+            return;
+        }
+        if (e instanceof EmptyFieldException){
+            WrongInputException wrongInputException = (WrongInputException) e;
+            canNotBeEmpty();
+            return;
+        }
+        if (e instanceof MustBeHigherException){
+            WrongInputException wrongInputException = (WrongInputException) e;
+            mustBeHigher(wrongInputException.getInfo());
+            return;
+        }
+        if (e instanceof ShouldNotContainException){
+            WrongInputException wrongInputException = (WrongInputException) e;
+            mustBeHigher(wrongInputException.getInfo());
+            return;
+        }
+        warningMessage("Something went wrong. Please, try again.");
+        e.printStackTrace();
     }
 
     public void warningMessage(String message) {
